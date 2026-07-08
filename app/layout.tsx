@@ -40,7 +40,7 @@ const cycleScript = `(function(){
   }
   var v=document.getElementById('bg-video');
   if(v){
-    if(!isMobile){v.src=prefix+VIDS[0];v.load();v.play().catch(function(){});}
+    v.src=prefix+VIDS[0];v.load();v.play().catch(function(){});
     setInterval(function(){
       if(advancing)return;
       var v=document.getElementById('bg-video');
