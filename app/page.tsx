@@ -13,6 +13,7 @@ function VideoBackground() {
       muted
       playsInline
       preload="auto"
+      suppressHydrationWarning
       style={{
         position: "fixed",
         top: 0, left: 0,
