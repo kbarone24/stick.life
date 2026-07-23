@@ -30,6 +30,14 @@ const marqueeScript = `(function(){
   if(!track)return;
   track.style.animation='none';
   var offset=0,lastTime=null,paused=false,dragging=false,dragStartX=0,dragStartOffset=0;
+  var label=track.querySelector('.meetup-label');
+  var container=track.parentElement;
+  if(label&&container){
+    var containerRect=container.getBoundingClientRect();
+    var labelRect=label.getBoundingClientRect();
+    offset=(containerRect.left+containerRect.width/2)-(labelRect.left+labelRect.width/2);
+    track.style.transform='translateX('+offset+'px)';
+  }
   function loop(time){
     if(!paused&&!dragging){
       var hw=track.scrollWidth/2;

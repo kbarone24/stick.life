@@ -147,13 +147,14 @@ export default function Home() {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 10, background: "rgba(18,18,18,0.8)", backdropFilter: "blur(6px)" }} className="h-24 flex flex-col relative">
         <a href="/calendar" className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 text-xl text-white/70 hover:text-white transition-colors">📅</a>
         <div className="flex-1 flex items-end justify-center pb-0">
-          <img src="/0708.gif" alt="Longevity Stick" className="h-11 w-auto" />
+          <img src="/1708.gif" alt="Longevity Stick" className="h-11 w-auto" />
         </div>
         <div className="h-12 overflow-hidden flex items-center">
           <div className="marquee-track text-base text-white/90 font-bold tracking-wide">
             {[0, 1].map((i) => (
               <span key={i} className="marquee-item" style={{ paddingRight: "2rem" }}>
-                {"🎋 Find your Meetup! 🎋     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
+                <span className="meetup-label">🎋 Find your Meetup! 🎋</span>
+                {"     🌅 Transmitter, Thursdays @ 8a     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
               </span>
             ))}
           </div>
@@ -212,6 +213,7 @@ export default function Home() {
           <p className="text-2xl sm:text-3xl font-semibold text-white/90">🎋 Community meetups 🎋</p>
           <p className="mt-1 text-sm text-white/50">Free + sticks provided!</p>
           <ul className="mt-6 space-y-2 text-base sm:text-lg text-white/80">
+            <li>🌅 Transmitter, Thursdays 8a</li>
             <li>🌅 Transmitter, Fridays 7:30p</li>
             <li>🌳 HVK, Saturdays 10a</li>
             <li>🌁 Domino, Sundays 10a</li>

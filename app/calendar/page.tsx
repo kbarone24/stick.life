@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const MEETUPS: Record<number, { emoji: string; name: string; time: string; neighborhood: string }> = {
+  4: { emoji: "🌅", name: "WNYC Transmitter Park", time: "8a",    neighborhood: "Greenpoint" },
   5: { emoji: "🌅", name: "WNYC Transmitter Park", time: "7:30p", neighborhood: "Greenpoint" },
   6: { emoji: "🌳", name: "Herbert Von King Park", time: "10a",   neighborhood: "Bed-Stuy" },
   0: { emoji: "🌁", name: "Domino Park",           time: "10a",   neighborhood: "Williamsburg" },
@@ -122,7 +123,8 @@ export default function CalendarPage() {
           <div className="marquee-track text-base text-white/90 font-bold tracking-wide">
             {[0, 1].map((i) => (
               <span key={i} className="marquee-item" style={{ paddingRight: "2rem" }}>
-                {"🎋 Find your Meetup! 🎋     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
+                <span className="meetup-label">🎋 Find your Meetup! 🎋</span>
+                {"     🌅 Transmitter, Thursdays @ 8a     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
               </span>
             ))}
           </div>
