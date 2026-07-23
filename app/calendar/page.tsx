@@ -2,13 +2,23 @@
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-const MEETUPS: Record<number, { emoji: string; name: string; time: string; neighborhood: string }> = {
-  4: { emoji: "🌅", name: "WNYC Transmitter Park", time: "8a",    neighborhood: "Greenpoint" },
-  5: { emoji: "🌅", name: "WNYC Transmitter Park", time: "7:30p", neighborhood: "Greenpoint" },
-  6: { emoji: "🌳", name: "Herbert Von King Park", time: "10a",   neighborhood: "Bed-Stuy" },
-  0: { emoji: "🌁", name: "Domino Park",           time: "10a",   neighborhood: "Williamsburg" },
-  1: { emoji: "🐉", name: "Columbus Park",          time: "6:30a", neighborhood: "Chinatown" },
+type Meetup = { emoji: string; name: string; time: string; neighborhood: string; hiddenBefore?: { year: number; month: number } };
+
+const MEETUPS: Record<number, Meetup[]> = {
+  4: [{ emoji: "🌅", name: "WNYC Transmitter Park", time: "8a",    neighborhood: "Greenpoint" }],
+  5: [{ emoji: "🌅", name: "WNYC Transmitter Park", time: "7:30p", neighborhood: "Greenpoint", hiddenBefore: { year: 2026, month: 8 } }],
+  6: [{ emoji: "🌳", name: "Herbert Von King Park", time: "10a",   neighborhood: "Bed-Stuy" }],
+  0: [
+    { emoji: "🌅", name: "WNYC Transmitter Park", time: "8:30a", neighborhood: "Greenpoint" },
+    { emoji: "🌁", name: "Domino Park",           time: "10a",   neighborhood: "Williamsburg" },
+  ],
+  1: [{ emoji: "🐉", name: "Columbus Park",          time: "6:30a", neighborhood: "Chinatown" }],
 };
+
+function isVisible(m: Meetup, year: number, month: number) {
+  if (!m.hiddenBefore) return true;
+  return year > m.hiddenBefore.year || (year === m.hiddenBefore.year && month >= m.hiddenBefore.month);
+}
 
 const MONTH_NAMES = [
   "January","February","March","April","May","June",
@@ -64,27 +74,32 @@ function CalendarContent() {
       <div className="grid grid-cols-7 gap-y-1">
         {cells.map((day, i) => {
           if (!day) return <div key={i} />;
-          const dow    = (firstDay + day - 1) % 7;
-          const meetup = MEETUPS[dow];
+          const dow     = (firstDay + day - 1) % 7;
+          const meetups = (MEETUPS[dow] ?? []).filter(m => isVisible(m, year, month));
           const isToday = day === todayDate && month === todayMonth && year === todayYear;
           return (
             <div
               key={i}
               className="flex flex-col items-center py-1.5 rounded-lg"
-              style={{ background: meetup ? "rgba(255,255,255,0.06)" : "transparent" }}
+              style={{ background: meetups.length ? "rgba(255,255,255,0.06)" : "transparent" }}
             >
               <span
                 className="text-sm font-medium w-8 h-8 flex items-center justify-center rounded-full"
                 style={{
                   background: isToday ? "white" : "transparent",
-                  color: isToday ? "#121212" : meetup ? "white" : "rgba(255,255,255,0.4)",
+                  color: isToday ? "#121212" : meetups.length ? "white" : "rgba(255,255,255,0.4)",
                 }}
               >
                 {day}
               </span>
-              {meetup && (
-                <span className="text-xs mt-0.5 leading-tight text-center text-white/60">
-                  {meetup.emoji}<br />{meetup.time}
+              {meetups.length > 0 && (
+                <span className="text-[10px] mt-0.5 leading-tight text-center text-white/60">
+                  {meetups.map((m, mi) => (
+                    <React.Fragment key={mi}>
+                      {mi > 0 && <br />}
+                      {m.emoji} {m.time}
+                    </React.Fragment>
+                  ))}
                 </span>
               )}
             </div>
@@ -94,19 +109,31 @@ function CalendarContent() {
 
       {/* Legend */}
       <div className="mt-8 space-y-2 border-t border-white/10 pt-6">
-        {Object.values(MEETUPS).map(m => (
-          <div key={m.name} className="flex items-baseline gap-2 text-sm text-white/70">
-            <span>{m.emoji}</span>
-            <span>{m.name} · {m.time}</span>
-            <span className="text-white/40 text-xs">{m.neighborhood}</span>
-          </div>
-        ))}
+        {[4, 5, 6, 0, 1].flatMap((dow) =>
+          (MEETUPS[dow] ?? []).filter(m => isVisible(m, year, month)).map((m, i) => (
+            <div key={dow + "-" + i} className="flex items-baseline gap-2 text-sm text-white/70">
+              <span className="text-white/40 text-xs w-8">{DAY_NAMES[dow]}</span>
+              <span>{m.emoji}</span>
+              <span>{m.name} · {m.time}</span>
+              <span className="text-white/40 text-xs">{m.neighborhood}</span>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 }
 
 export default function CalendarPage() {
+  const fridayPaused = new Date() < new Date(2026, 8, 1);
+  const meetupSegments = [
+    "🌅 Transmitter, Thursdays @ 8a",
+    ...(fridayPaused ? [] : ["🌅 Transmitter, Fridays @ 730p"]),
+    "🌳 HVK, Saturdays @ 10a",
+    "🌅 Transmitter, Sundays @ 830a",
+    "🌁 Domino, Sundays @ 10a",
+    "🐉 Columbus Park, Mondays @ 630a",
+  ];
   return (
     <div style={{ background: "#121212", minHeight: "100vh", color: "white" }} className="flex flex-col">
       {/* Nav */}
@@ -124,7 +151,7 @@ export default function CalendarPage() {
             {[0, 1].map((i) => (
               <span key={i} className="marquee-item" style={{ paddingRight: "2rem" }}>
                 <span className="meetup-label">🎋 Find your Meetup! 🎋</span>
-                {"     🌅 Transmitter, Thursdays @ 8a     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
+                {"     " + meetupSegments.join("    ")}
               </span>
             ))}
           </div>

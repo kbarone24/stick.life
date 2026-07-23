@@ -141,6 +141,15 @@ function FigureSquat() {
 }
 
 export default function Home() {
+  const fridayPaused = new Date() < new Date(2026, 8, 1);
+  const meetupSegments = [
+    "🌅 Transmitter, Thursdays @ 8a",
+    ...(fridayPaused ? [] : ["🌅 Transmitter, Fridays @ 730p"]),
+    "🌳 HVK, Saturdays @ 10a",
+    "🌅 Transmitter, Sundays @ 830a",
+    "🌁 Domino, Sundays @ 10a",
+    "🐉 Columbus Park, Mondays @ 630a",
+  ];
   return (
     <>
       {/* Nav */}
@@ -154,7 +163,7 @@ export default function Home() {
             {[0, 1].map((i) => (
               <span key={i} className="marquee-item" style={{ paddingRight: "2rem" }}>
                 <span className="meetup-label">🎋 Find your Meetup! 🎋</span>
-                {"     🌅 Transmitter, Thursdays @ 8a     🌅 Transmitter, Fridays @ 730p    🌳 HVK, Saturdays @ 10a     🌁 Domino, Sundays @ 10a     🐉 Columbus Park, Mondays @ 630a"}
+                {"     " + meetupSegments.join("    ")}
               </span>
             ))}
           </div>
@@ -214,8 +223,9 @@ export default function Home() {
           <p className="mt-1 text-sm text-white/50">Free + sticks provided!</p>
           <ul className="mt-6 space-y-2 text-base sm:text-lg text-white/80">
             <li>🌅 Transmitter, Thursdays 8a</li>
-            <li>🌅 Transmitter, Fridays 7:30p</li>
+            {!fridayPaused && <li>🌅 Transmitter, Fridays 7:30p</li>}
             <li>🌳 HVK, Saturdays 10a</li>
+            <li>🌅 Transmitter, Sundays 8:30a</li>
             <li>🌁 Domino, Sundays 10a</li>
             <li>🐉 Columbus, Mondays 6:30a</li>
           </ul>
