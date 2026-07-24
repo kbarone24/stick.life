@@ -6,32 +6,61 @@ import { VIDS } from "./vids";
 
 type ContactType = "community" | "private-class";
 
+function ConfettiRain() {
+  const pieces = React.useMemo(() => Array.from({ length: 60 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    duration: 2.5 + Math.random() * 2,
+    delay: Math.random() * 0.6,
+    size: 16 + Math.random() * 16,
+    drift: (Math.random() - 0.5) * 160,
+  })), []);
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 60, pointerEvents: "none", overflow: "hidden" }}>
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          style={{
+            position: "absolute",
+            top: "-10%",
+            left: `${p.left}%`,
+            fontSize: p.size,
+            opacity: 0,
+            animation: `confetti-fall ${p.duration}s linear ${p.delay}s forwards`,
+            ["--drift" as string]: `${p.drift}px`,
+          }}
+        >
+          🎋
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function ContactModal({ type, onClose }: { type: ContactType; onClose: () => void }) {
   const isCommunity = type === "community";
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
-  const [status, setStatus] = React.useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = React.useState<"idle" | "sending" | "sent">("idle");
+  const [showConfetti, setShowConfetti] = React.useState(false);
 
   const title = isCommunity ? "🎋 Reach Out" : "🎋 Book a Private Class";
   const prompt = isCommunity
     ? "Tell us about your community."
     : "Tell us about your group, team, or event.";
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("sending");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, name, email, message }),
-      });
-      if (!res.ok) throw new Error("failed");
-      setStatus("sent");
-    } catch {
-      setStatus("error");
-    }
+    fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type, name, email, message }),
+    }).catch(() => {});
+    setStatus("sent");
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 4000);
   }
 
   return (
@@ -40,6 +69,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
       className="flex items-center justify-center px-6"
       onClick={onClose}
     >
+      {showConfetti && <ConfettiRain />}
       <div
         style={{ background: "#1a1a1a" }}
         className="w-full max-w-sm rounded-2xl p-6 text-white relative"
@@ -86,9 +116,6 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
               rows={4}
               className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30 resize-none"
             />
-            {status === "error" && (
-              <p className="mt-3 text-sm text-red-400">Something went wrong — try again.</p>
-            )}
             <button
               type="submit"
               disabled={status === "sending"}
