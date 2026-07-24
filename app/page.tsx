@@ -4,6 +4,103 @@ import React from "react";
 import { VIDS } from "./vids";
 
 
+type ContactType = "community" | "private-class";
+
+function ContactModal({ type, onClose }: { type: ContactType; onClose: () => void }) {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [status, setStatus] = React.useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const title = type === "community" ? "Reach Out" : "Book a Private Class";
+  const prompt = type === "community"
+    ? "Tell us about your community and what you're looking for."
+    : "Tell us about your group, team, or event.";
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, name, email, message }),
+      });
+      if (!res.ok) throw new Error("failed");
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div
+      style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(0,0,0,0.6)" }}
+      className="flex items-center justify-center px-6"
+      onClick={onClose}
+    >
+      <div
+        style={{ background: "#1a1a1a" }}
+        className="w-full max-w-sm rounded-2xl p-6 text-white relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-3 right-3 text-white/50 hover:text-white text-xl leading-none"
+        >
+          ×
+        </button>
+        {status === "sent" ? (
+          <div className="text-center py-6">
+            <p className="text-xl font-semibold">Message sent!</p>
+            <p className="mt-2 text-sm text-white/60">We&apos;ll get back to you soon.</p>
+            <button onClick={onClose} className="mt-6 text-sm text-blue-400 hover:text-blue-300">Close</button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <p className="text-xl font-semibold">{title}</p>
+            <p className="mt-1 text-sm text-white/60">{prompt}</p>
+            <input
+              required
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="mt-5 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
+            />
+            <input
+              required
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
+            />
+            <textarea
+              required
+              placeholder="Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={4}
+              className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30 resize-none"
+            />
+            {status === "error" && (
+              <p className="mt-3 text-sm text-red-400">Something went wrong — try again.</p>
+            )}
+            <button
+              type="submit"
+              disabled={status === "sending"}
+              className="mt-4 w-full rounded-lg bg-white text-black font-semibold py-2 text-sm disabled:opacity-50"
+            >
+              {status === "sending" ? "Sending…" : "Send"}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function VideoBackground() {
   const style: React.CSSProperties = {
     position: "fixed",
@@ -21,6 +118,7 @@ function VideoBackground() {
 }
 
 export default function Home() {
+  const [contactType, setContactType] = React.useState<ContactType | null>(null);
   const fridayPaused = new Date() < new Date(2026, 8, 1);
   const meetupSegments = [
     "🌅 Transmitter, Thursdays @ 8a",
@@ -100,11 +198,13 @@ export default function Home() {
             <li>🌁 Domino, Sundays 10a</li>
             <li>🐉 Columbus, Mondays 6:30a</li>
           </ul>
-          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><a href="https://www.instagram.com/longevitysticknyc?igsh=MTZhZDVnbDRobGQzcQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Reach out</a></p>
+          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><button onClick={() => setContactType("community")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Reach out</button></p>
           <img src="/0708.gif" alt="Longevity Stick moves" className="mt-10 max-w-xs sm:max-w-sm rounded-xl" style={{ zIndex: 3, position: "relative" }} />
-          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><a href="https://www.instagram.com/longevitysticknyc?igsh=MTZhZDVnbDRobGQzcQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">Book a private class</a></p>
+          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><button onClick={() => setContactType("private-class")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Book a private class</button></p>
         </div>
       </div>
+
+      {contactType && <ContactModal type={contactType} onClose={() => setContactType(null)} />}
     </>
   );
 }
