@@ -13,7 +13,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
   const [message, setMessage] = React.useState("");
   const [status, setStatus] = React.useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const title = isCommunity ? "Reach Out" : "Book a Private Class";
+  const title = isCommunity ? "🎋 Reach Out" : "🎋 Book a Private Class";
   const prompt = isCommunity
     ? "Tell us about your community."
     : "Tell us about your group, team, or event.";
@@ -200,9 +200,9 @@ export default function Home() {
             <li>🌁 Domino, Sundays 10a</li>
             <li>🐉 Columbus, Mondays 6:30a</li>
           </ul>
-          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><button onClick={() => setContactType("community")} className="text-blue-400 hover:text-blue-300 transition-colors underline">🎋 Reach out</button></p>
+          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><button onClick={() => setContactType("community")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Reach out</button></p>
           <img src="/0708.gif" alt="Longevity Stick moves" className="mt-10 max-w-xs sm:max-w-sm rounded-xl" style={{ zIndex: 3, position: "relative" }} />
-          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><button onClick={() => setContactType("private-class")} className="text-blue-400 hover:text-blue-300 transition-colors underline">🎋 Book a private class</button></p>
+          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><button onClick={() => setContactType("private-class")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Book a private class</button></p>
         </div>
       </div>
 
