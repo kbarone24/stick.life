@@ -61,7 +61,6 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
         ) : (
           <form onSubmit={handleSubmit}>
             <p className="text-xl font-semibold">{title}</p>
-            {!isCommunity && <p className="mt-1 text-sm text-white/60">{prompt}</p>}
             {!isCommunity && (
               <input
                 required
@@ -81,7 +80,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
             />
             <textarea
               required
-              placeholder={isCommunity ? prompt : "Message"}
+              placeholder={prompt}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
@@ -201,9 +200,9 @@ export default function Home() {
             <li>🌁 Domino, Sundays 10a</li>
             <li>🐉 Columbus, Mondays 6:30a</li>
           </ul>
-          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><button onClick={() => setContactType("community")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Reach out</button></p>
+          <p className="mt-4 text-sm text-white/50">Does your community need a meetup?<br /><button onClick={() => setContactType("community")} className="text-blue-400 hover:text-blue-300 transition-colors underline">🎋 Reach out</button></p>
           <img src="/0708.gif" alt="Longevity Stick moves" className="mt-10 max-w-xs sm:max-w-sm rounded-xl" style={{ zIndex: 3, position: "relative" }} />
-          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><button onClick={() => setContactType("private-class")} className="text-blue-400 hover:text-blue-300 transition-colors underline">Book a private class</button></p>
+          <p className="mt-8 text-sm text-white/50">Want to bring Longevity to your group, team, or event?<br /><button onClick={() => setContactType("private-class")} className="text-blue-400 hover:text-blue-300 transition-colors underline">🎋 Book a private class</button></p>
         </div>
       </div>
 
