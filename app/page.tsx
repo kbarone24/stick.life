@@ -6,30 +6,27 @@ import { VIDS } from "./vids";
 
 type ContactType = "community" | "private-class";
 
-function ConfettiRain() {
-  const pieces = React.useMemo(() => Array.from({ length: 60 }, (_, i) => ({
+function EchoEffect() {
+  const echoes = React.useMemo(() => Array.from({ length: 22 }, (_, i) => ({
     id: i,
-    left: Math.random() * 100,
-    duration: 2.5 + Math.random() * 2,
-    delay: Math.random() * 0.6,
-    size: 10 + Math.random() * 34,
-    drift: (Math.random() - 0.5) * 160,
-    rot: (Math.random() - 0.5) * 50,
+    left: 10 + Math.random() * 80,
+    top: 15 + Math.random() * 70,
+    delay: Math.random() * 1.1,
+    size: 28 + Math.random() * 26,
   })), []);
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 60, pointerEvents: "none", overflow: "hidden" }}>
-      {pieces.map((p) => (
+      {echoes.map((e) => (
         <span
-          key={p.id}
+          key={e.id}
           style={{
             position: "absolute",
-            top: "-10%",
-            left: `${p.left}%`,
-            fontSize: p.size,
+            left: `${e.left}%`,
+            top: `${e.top}%`,
+            fontSize: e.size,
             opacity: 0,
-            animation: `confetti-fall ${p.duration}s ease-in-out ${p.delay}s forwards`,
-            ["--drift" as string]: `${p.drift}px`,
-            ["--rot" as string]: `${p.rot}deg`,
+            transform: "translate(-50%, -50%) scale(0.2)",
+            animation: `echo-pulse 1.1s ease-out ${e.delay}s forwards`,
           }}
         >
           🎋
@@ -45,7 +42,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [status, setStatus] = React.useState<"idle" | "sending" | "sent">("idle");
-  const [showConfetti, setShowConfetti] = React.useState(false);
+  const [showEcho, setShowEcho] = React.useState(false);
 
   const title = isCommunity ? "🎋 Reach Out" : "🎋 Book a Private Class";
   const prompt = isCommunity
@@ -61,8 +58,8 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
       body: JSON.stringify({ type, name, email, message }),
     }).catch(() => {});
     setStatus("sent");
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 4000);
+    setShowEcho(true);
+    setTimeout(() => setShowEcho(false), 2200);
   }
 
   return (
@@ -71,7 +68,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
       className="flex items-center justify-center px-6"
       onClick={onClose}
     >
-      {showConfetti && <ConfettiRain />}
+      {showEcho && <EchoEffect />}
       <div
         style={{ background: "#1a1a1a" }}
         className="w-full max-w-sm rounded-2xl p-6 text-white relative"
