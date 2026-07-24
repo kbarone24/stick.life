@@ -44,11 +44,23 @@ body {
 
 @keyframes confetti-fall {
   0% {
-    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  10% {
     opacity: 1;
   }
+  25% {
+    transform: translateY(15vh) translateX(calc(var(--drift, 0px) * 0.25)) rotate(calc(var(--rot, 15deg) * 0.3)) scale(1.25);
+  }
+  50% {
+    transform: translateY(50vh) translateX(calc(var(--drift, 0px) * 0.5)) rotate(calc(var(--rot, 15deg) * 0.6)) scale(0.75);
+  }
+  75% {
+    transform: translateY(85vh) translateX(calc(var(--drift, 0px) * 0.75)) rotate(calc(var(--rot, 15deg) * 0.85)) scale(1.15);
+  }
   100% {
-    transform: translateY(110vh) translateX(var(--drift, 0px)) rotate(720deg);
+    transform: translateY(110vh) translateX(var(--drift, 0px)) rotate(var(--rot, 15deg)) scale(0.9);
     opacity: 0.9;
   }
 }

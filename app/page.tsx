@@ -12,8 +12,9 @@ function ConfettiRain() {
     left: Math.random() * 100,
     duration: 2.5 + Math.random() * 2,
     delay: Math.random() * 0.6,
-    size: 16 + Math.random() * 16,
+    size: 10 + Math.random() * 34,
     drift: (Math.random() - 0.5) * 160,
+    rot: (Math.random() - 0.5) * 50,
   })), []);
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 60, pointerEvents: "none", overflow: "hidden" }}>
@@ -26,8 +27,9 @@ function ConfettiRain() {
             left: `${p.left}%`,
             fontSize: p.size,
             opacity: 0,
-            animation: `confetti-fall ${p.duration}s linear ${p.delay}s forwards`,
+            animation: `confetti-fall ${p.duration}s ease-in-out ${p.delay}s forwards`,
             ["--drift" as string]: `${p.drift}px`,
+            ["--rot" as string]: `${p.rot}deg`,
           }}
         >
           🎋
