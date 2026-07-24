@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
 
   if (
     typeof type !== "string" || !LABELS[type] ||
-    typeof name !== "string" || !name.trim() ||
     typeof email !== "string" || !email.trim() ||
-    typeof message !== "string" || !message.trim()
+    typeof message !== "string" || !message.trim() ||
+    (type === "private-class" && (typeof name !== "string" || !name.trim()))
   ) {
     return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });
   }
@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail({
       from: `"Stick Life Site" <${process.env.SMTP_USER}>`,
       to: process.env.CONTACT_TO_EMAIL || process.env.SMTP_USER,
-      replyTo: `"${name}" <${email}>`,
-      subject: `[${LABELS[type]}] ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
+      replyTo: name ? `"${name}" <${email}>` : email,
+      subject: name ? `[${LABELS[type]}] ${name}` : `[${LABELS[type]}] ${email}`,
+      text: name ? `From: ${name} <${email}>\n\n${message}` : `From: ${email}\n\n${message}`,
     });
   } catch (err) {
     console.error("contact form send failed", err);

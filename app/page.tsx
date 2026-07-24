@@ -7,13 +7,14 @@ import { VIDS } from "./vids";
 type ContactType = "community" | "private-class";
 
 function ContactModal({ type, onClose }: { type: ContactType; onClose: () => void }) {
+  const isCommunity = type === "community";
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [status, setStatus] = React.useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const title = type === "community" ? "Reach Out" : "Book a Private Class";
-  const prompt = type === "community"
+  const title = isCommunity ? "Reach Out" : "Book a Private Class";
+  const prompt = isCommunity
     ? "Tell us about your community and what you're looking for."
     : "Tell us about your group, team, or event.";
 
@@ -60,25 +61,27 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
         ) : (
           <form onSubmit={handleSubmit}>
             <p className="text-xl font-semibold">{title}</p>
-            <p className="mt-1 text-sm text-white/60">{prompt}</p>
-            <input
-              required
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-5 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
-            />
+            {!isCommunity && <p className="mt-1 text-sm text-white/60">{prompt}</p>}
+            {!isCommunity && (
+              <input
+                required
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-5 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
+              />
+            )}
             <input
               required
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
+              className={`w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30 ${isCommunity ? "mt-5" : "mt-3"}`}
             />
             <textarea
               required
-              placeholder="Message"
+              placeholder={isCommunity ? prompt : "Message"}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
