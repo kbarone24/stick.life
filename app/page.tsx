@@ -96,7 +96,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-5 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30"
+                className="mt-5 w-full rounded-lg bg-white/10 px-3 py-2 text-base outline-none focus:ring-1 focus:ring-white/30"
               />
             )}
             <input
@@ -105,7 +105,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30 ${isCommunity ? "mt-5" : "mt-3"}`}
+              className={`w-full rounded-lg bg-white/10 px-3 py-2 text-base outline-none focus:ring-1 focus:ring-white/30 ${isCommunity ? "mt-5" : "mt-3"}`}
             />
             <textarea
               required
@@ -113,7 +113,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
-              className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/30 resize-none"
+              className="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-base outline-none focus:ring-1 focus:ring-white/30 resize-none"
             />
             <button
               type="submit"
