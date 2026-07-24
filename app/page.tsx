@@ -15,7 +15,7 @@ function ContactModal({ type, onClose }: { type: ContactType; onClose: () => voi
 
   const title = isCommunity ? "Reach Out" : "Book a Private Class";
   const prompt = isCommunity
-    ? "Tell us about your community and what you're looking for."
+    ? "Tell us about your community."
     : "Tell us about your group, team, or event.";
 
   async function handleSubmit(e: React.FormEvent) {
