@@ -144,7 +144,7 @@ export default function CalendarPage() {
         <a href="/calendar" className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 text-xl text-white">📅</a>
         <a href="/" className="absolute top-0 left-0 flex items-center justify-center w-12 h-12 text-xl text-white/70 hover:text-white transition-colors">←</a>
         <div className="flex-1 flex items-end justify-center pb-0">
-          <img src="/0708.gif" alt="Longevity Stick" className="h-11 w-auto" />
+          <img src="/0708.gif" alt="Longevity Stick" width={59} height={44} className="h-11 w-auto" />
         </div>
         <div className="h-12 overflow-hidden flex items-center">
           <div className="marquee-track text-base text-white/90 font-bold tracking-wide">
