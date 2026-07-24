@@ -218,7 +218,7 @@ export default function Home() {
         <div className="mt-20 text-center" style={{ zIndex: 3, position: "relative" }}>
           <p className="text-2xl sm:text-3xl font-semibold text-white/90">🎋 Community meetups 🎋</p>
           <p className="mt-1 text-sm text-white/50">Free + sticks provided!</p>
-          <ul className="mt-6 space-y-2 text-base sm:text-lg text-white/80">
+          <ul className="mt-6 space-y-2 text-base sm:text-lg font-bold text-white/80">
             <li>🌅 Transmitter, Thursdays 8a</li>
             {!fridayPaused && <li>🌅 Transmitter, Fridays 7:30p</li>}
             <li>🌳 HVK, Saturdays 10a</li>
