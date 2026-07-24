@@ -35,6 +35,19 @@ export default function Home() {
       {/* Nav */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 10, background: "rgba(18,18,18,0.8)", backdropFilter: "blur(6px)" }} className="h-24 flex flex-col relative">
         <a href="/calendar" className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 text-xl text-white/70 hover:text-white transition-colors">📅</a>
+        <a
+          href="https://www.instagram.com/longevitysticknyc?igsh=MTZhZDVnbDRobGQzcQ%3D%3D&utm_source=qr"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Longevity Stick on Instagram"
+          className="absolute top-0 left-0 flex items-center justify-center w-12 h-12 text-white/70 hover:text-white transition-colors"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+        </a>
         <div className="flex-1 flex items-end justify-center gap-2 pb-0">
           <img src="/1708.gif" alt="Longevity Stick" width={59} height={44} className="h-11 w-auto" />
           <img src="/0723-2.gif" alt="Longevity Stick" width={59} height={44} className="h-11 w-auto" />
